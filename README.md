@@ -2,7 +2,7 @@
 
 面向 Google TV / Android TV 的原生客户端。交互和布局沿用 [Olevod TV](https://github.com/abdvl/olevod-tv-app)，焦点、按钮与进度条使用淡蓝色 `#9BD7FF`。
 
-**当前版本：0.1.0-dev 开发原型，已有可构建的 Android 工程和模拟器实站验证，尚未正式发布。**
+**当前版本：0.1.1-dev 开发原型，修复 BD1 / HD3、HLS 解析及不兼容编码的同集换线，尚未正式发布。**
 
 ## 已实现
 
@@ -15,13 +15,15 @@
 
 ![首页续播卡](docs/verification/prototype/screenshots/recent-focused.png)
 
-[全部原生截图与验证范围](docs/verification/prototype/README.md) · [实施进度](docs/EXECUTION_PLAN.md)
+[播放修复验证](docs/verification/playback-fix/README.md) · [原型截图与验证范围](docs/verification/prototype/README.md) · [实施进度](docs/EXECUTION_PLAN.md)
 
 ## 当前边界
 
-已在 Android TV 模拟器上验证同一影片的 HD7 / BBA 与 HD2 / rrmj：首帧、暂停、快进、播放中换源、暂停中换源和本地进度。HD2 的部分 HEVC 文件需要 Android 11 / API 30 以上的系统格式解析器；较旧设备可能需要选择 HD7。HD10、其他 provider、真机长期播放、断网恢复、完整遥控器遍历和 1.3 倍字体尚未完成验收。
+0.1.1-dev 已在 TV 模拟器验证《海洋奇缘：启航》BD1 / HLS 和收藏《权力的游戏第八季》的兼容线路自动选择、快进与续播。Chromecast 已安装更新，前台播放验收仍需唤醒设备。
 
-带有 `encrypt=3` 的已知 Artplayer 线路使用短生命周期 WebView 运行站点解析脚本，从实际 video 元素取得媒体地址后立即释放网页，由 Media3 播放。未知解析方式会提示切换线路。媒体地址不写入历史或项目日志，不提供账号、网盘下载或云同步功能。
+原型阶段已在 Android TV 模拟器上验证同一影片的 HD7 / BBA 与 HD2 / rrmj：首帧、暂停、快进、播放中换源、暂停中换源和本地进度。HD2 的部分 HEVC 文件需要 Android 11 / API 30 以上的系统格式解析器；较旧设备可能需要选择 HD7。HD10、其他 provider、真机长期播放、断网恢复、完整遥控器遍历和 1.3 倍字体尚未完成验收。
+
+带有 `encrypt=3` 的已知 Artplayer 线路使用短生命周期 WebView 运行站点解析脚本，在 video 取得元数据后读取直链或其所属播放器的 HLS 清单，立即释放网页，由 Media3 播放。未知解析方式会提示切换线路。媒体地址不写入历史或项目日志，不提供账号、网盘下载或云同步功能。
 
 ## 构建
 

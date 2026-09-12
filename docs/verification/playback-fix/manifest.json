@@ -1,0 +1,25 @@
+{
+  "version": "0.1.1-dev",
+  "versionCode": 2,
+  "apk": "artifacts/prototype/libvio-tv-0.1.1-dev-debug.apk",
+  "sha256": "4b044d449c7f6b6acf69cbb2b48b25620d941e71f8b7e5d7fdf0f5ce6743a138",
+  "emulatorPlaybackVerified": true,
+  "physicalPlaybackVerified": false,
+  "screenshots": [
+    {
+      "path": "screenshots/game-of-thrones-compatible-native.png",
+      "sha256": "bfd846ee5c9602ed9748419204979704bfdc7418d91db5dfa5de2f2175de896f"
+    },
+    {
+      "path": "screenshots/moana-bd1-native.png",
+      "sha256": "c83477d33b202f418c9dccd44c3790223e75268d83cb54c87ead2d3eb3542cbd"
+    }
+  ],
+  "physicalResolverVerified": true,
+  "installedApkSha256": "4b044d449c7f6b6acf69cbb2b48b25620d941e71f8b7e5d7fdf0f5ce6743a138",
+  "originalFavoritesPreserved": true,
+  "originalHistoryRowsPreserved": 2,
+  "unitTests": 17,
+  "emulatorUiCases": 2,
+  "emulatorRegressionCases": 3
+}

@@ -81,7 +81,7 @@ internal fun Notice(message:String,retry:(()->Unit)?=null){Column(Modifier.paddi
 @Composable
 private fun HomeScreen(model:AppModel,open:(Movie)->Unit,history:()->Unit,browse:(Int)->Unit){
     val records by model.library.records.collectAsState();val list=rememberLazyListState()
-    LazyColumn(state=list,modifier=Modifier.fillMaxSize().padding(horizontal=36.dp),contentPadding=PaddingValues(top=12.dp,bottom=64.dp),verticalArrangement=Arrangement.spacedBy(24.dp)){
+    LazyColumn(state=list,modifier=Modifier.testTag("home-feed").fillMaxSize().padding(horizontal=36.dp),contentPadding=PaddingValues(top=12.dp,bottom=64.dp),verticalArrangement=Arrangement.spacedBy(24.dp)){
         item("recent"){Column(verticalArrangement=Arrangement.spacedBy(12.dp)){
             SectionHeading("最近播放",more=history)
             if(records.isEmpty())Text("从一部影片开始，观看进度会自动保存在本机",color=Muted,fontSize=14.sp)

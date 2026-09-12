@@ -14,13 +14,15 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import java.net.URLDecoder
 import java.util.Base64
+import java.util.concurrent.atomic.AtomicReference
 
-class ResolvedMedia(val url:String,val referer:String,val userAgent:String,val internalId:Long) {
+class ResolvedMedia(val url:String,val referer:String,val userAgent:String,val internalId:Long,val mimeType:String?=null) {
     override fun toString()="ResolvedMedia(internalId=$internalId)"
 }
 
 /** Runs only the site's known Artplayer entry; never exposes a native JS interface.
- * Media URLs are accepted from the actual video element once it has metadata.
+ * Media URLs are accepted only after the video has metadata. For MSE/blob playback,
+ * the manifest comes from that player or its observed HLS request in this attempt.
  * The short-lived WebView is stopped and removed before handing control to Media3.
  */
 class WebPlaybackResolver(private val context:Context,private val container:ViewGroup) {
@@ -35,11 +37,12 @@ class WebPlaybackResolver(private val context:Context,private val container:View
         if(decoded!=null&&decoded.toHttpUrlOrNull()?.isHttps==true){
             return@withContext ResolvedMedia(decoded,config.pageUrl,WebSettings.getDefaultUserAgent(context),config.internalId)
         }
-        if(config.encrypt!=3||config.provider !in setOf("BBA","rrmj","NBY"))throw SiteException("此线路暂不支持原生播放，请选择其他线路")
+        if(config.encrypt!=3||config.provider !in ARTPLAYER_PROVIDERS)throw SiteException("此线路暂不支持原生播放，请选择其他线路")
         val page=config.pageUrl.toHttpUrl()
         val endpoint=page.newBuilder().encodedPath("/static/player/artplayer/").query(null).addQueryParameter("url",config.value).build().toString()
         val web=WebView(context)
         var pageError:String?=null
+        val manifest=AtomicReference<ManifestRequest?>(null)
         try{
             web.settings.apply{
                 javaScriptEnabled=true;domStorageEnabled=true;mediaPlaybackRequiresUserGesture=true
@@ -56,6 +59,14 @@ class WebPlaybackResolver(private val context:Context,private val container:View
                     val u=request.url.toString().toHttpUrlOrNull()
                     return u==null||!u.isHttps||(request.isForMainFrame&&(u.host!=page.host||u.encodedPath!="/static/player/artplayer/"))
                 }
+                override fun shouldInterceptRequest(view:WebView,request:WebResourceRequest):WebResourceResponse? {
+                    val url=request.url.toString().toHttpUrlOrNull()
+                    if(!request.isForMainFrame&&request.method=="GET"&&url?.isHttps==true&&(url.encodedPath.endsWith(".m3u8",ignoreCase=true)||(url.host==page.host&&url.encodedPath=="/video_m3u8/secure.php"))){
+                        val referer=request.requestHeaders.entries.firstOrNull{it.key.equals("Referer",ignoreCase=true)}?.value.orEmpty()
+                        manifest.compareAndSet(null,ManifestRequest(url.toString(),referer))
+                    }
+                    return null
+                }
                 override fun onReceivedError(view:WebView,request:WebResourceRequest,error:WebResourceError){if(request.isForMainFrame)pageError="线路解析页面无法打开，请换源"}
                 override fun onReceivedHttpError(view:WebView,request:WebResourceRequest,error:WebResourceResponse){if(request.isForMainFrame)pageError="线路解析暂时不可用，请换源"}
             }
@@ -66,9 +77,9 @@ class WebPlaybackResolver(private val context:Context,private val container:View
                     pageError?.let{throw SiteException(it)}
                     val value=web.readVideo()
                     if(value!=null){
-                        val url=value.optString("url");val u=url.toHttpUrlOrNull()
-                        if(u?.isHttps==true&&value.optDouble("duration",0.0)>0&&value.optInt("ready")>=1){
-                            return@withTimeout ResolvedMedia(url,endpoint,web.settings.userAgentString,config.internalId)
+                        videoMedia(value,manifest.get()?.url)?.let { media ->
+                            val referer=manifest.get()?.takeIf{it.url==media.url}?.referer?:endpoint
+                            return@withTimeout ResolvedMedia(media.url,referer,web.settings.userAgentString,config.internalId,media.mimeType)
                         }
                     }
                     delay(250)
@@ -80,8 +91,22 @@ class WebPlaybackResolver(private val context:Context,private val container:View
             web.stopLoading();web.loadUrl("about:blank");web.onPause();container.removeView(web);web.destroy()
         }
     }
+    private class ManifestRequest(val url:String,val referer:String)
     private suspend fun WebView.readVideo():JSONObject?=suspendCancellableCoroutine{continuation->
-        evaluateJavascript("""(function(){const v=document.querySelector('video');if(!v)return null;v.muted=true;const x={url:v.currentSrc||v.src,duration:Number.isFinite(v.duration)?v.duration:0,ready:v.readyState};if(x.duration>0&&x.ready>=1)v.pause();return JSON.stringify(x);})()"""){raw->
+        evaluateJavascript("""(function(){
+            const v=document.querySelector('video');if(!v)return null;
+            v.muted=true;
+            const src=v.currentSrc||v.src;
+            const blob=src.startsWith('blob:');
+            const owner=typeof Artplayer!=='undefined'&&Array.isArray(Artplayer.instances)
+                ?Artplayer.instances.find(p=>p.template&&p.template.${'$'}video===v):null;
+            const option=owner&&owner.option;
+            const candidate=blob&&option?option.url:src;
+            const x={url:candidate,blob:blob,type:blob&&option?option.type:'',
+                duration:Number.isFinite(v.duration)?v.duration:0,ready:v.readyState};
+            if(x.duration>0&&x.ready>=1)v.pause();
+            return JSON.stringify(x);
+        })()"""){raw->
             val value=runCatching{(JSONTokener(raw).nextValue() as? String)?.let{JSONObject(it)}}.getOrNull()
             if(continuation.isActive)continuation.resume(value){_,_,_->}
         }

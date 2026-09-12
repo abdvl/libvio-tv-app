@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.media3.common.*
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.media3.session.MediaSession
@@ -15,7 +16,8 @@ import kotlinx.coroutines.*
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 internal class PlaybackController(context:Context,private val repo:LibvioRepository,private val library:LocalLibrary,
                          private val resolver:WebPlaybackResolver,private val scope:CoroutineScope) {
-    val player=ExoPlayer.Builder(context).setAudioAttributes(AudioAttributes.DEFAULT,true).setHandleAudioBecomingNoisy(true).build()
+    private val selector=DefaultTrackSelector(context).apply { setParameters(buildUponParameters().setExceedRendererCapabilitiesIfNecessary(false)) }
+    val player=ExoPlayer.Builder(context).setTrackSelector(selector).setAudioAttributes(AudioAttributes.DEFAULT,true).setHandleAudioBecomingNoisy(true).build()
     private val session=MediaSession.Builder(context,player).build()
     var state by mutableStateOf(PlayerUiState(Movie(0,"正在加载")));private set
     var sourceMenu by mutableStateOf(false)
@@ -26,7 +28,8 @@ internal class PlaybackController(context:Context,private val repo:LibvioReposit
     private var active:Attempt?=null
     private var lastSave=0L
     private var foreground=true
-    private data class Attempt(val generation:Long,val detail:Detail,val sourceIndex:Int,val episode:Episode,val media:ResolvedMedia,val desiredPlay:Boolean){val id get()=generation.toString()}
+    private val attemptedSources=mutableSetOf<Int>()
+    private data class Attempt(val generation:Long,val detail:Detail,val sourceIndex:Int,val episode:Episode,val media:ResolvedMedia,val desiredPlay:Boolean,val resumeAt:Long){val id get()=generation.toString()}
     private fun eventId(time:AnalyticsListener.EventTime):String?=runCatching{time.timeline.getWindow(time.windowIndex,Timeline.Window()).mediaItem.mediaId}.getOrNull()
     init {
         player.addListener(object:Player.Listener{
@@ -37,11 +40,22 @@ internal class PlaybackController(context:Context,private val repo:LibvioReposit
                 if(value==Player.STATE_ENDED){save();val a=active?:return;if(pending!=null||player.currentMediaItem?.mediaId!=a.id)return;val list=a.detail.sources[a.sourceIndex].episodes;val next=list.getOrNull(list.indexOf(a.episode)+1);if(next!=null)play(a.detail,a.sourceIndex,next,0,true)}
             }
             override fun onPlayerError(error:PlaybackException){
-                pending=null;state=state.copy(error="视频暂时无法播放，请重试或切换线路",buffering=false)
+                if(!tryCompatibleSource("该线路播放失败")){pending=null;state=state.copy(error="视频暂时无法播放，请重试或切换线路",buffering=false)}
             }
         })
         player.addAnalyticsListener(object:AnalyticsListener{
+            override fun onTracksChanged(eventTime:AnalyticsListener.EventTime,tracks:Tracks){
+                if(BuildConfig.DEBUG)android.util.Log.d("LibvioPlayback","tracks event=${eventId(eventTime)} pending=${pending?.id} video=${tracks.containsType(C.TRACK_TYPE_VIDEO)} supported=${tracks.isTypeSupported(C.TRACK_TYPE_VIDEO)}")
+                val attempt=pending?:return
+                if(eventId(eventTime)!=attempt.id||attempt.generation!=generation)return
+                if(tracks.containsType(C.TRACK_TYPE_VIDEO)&&!tracks.isTypeSupported(C.TRACK_TYPE_VIDEO)){
+                    if(!tryCompatibleSource("电视不支持此线路的视频格式")){
+                        pending=null;player.stop();state=state.copy(error="这些线路的视频格式暂不受本机支持，请手动选择其他线路",buffering=false)
+                    }
+                }
+            }
             override fun onRenderedFirstFrame(eventTime:AnalyticsListener.EventTime,output:Any,renderTimeMs:Long){
+                if(BuildConfig.DEBUG)android.util.Log.d("LibvioPlayback","firstFrame event=${eventId(eventTime)} pending=${pending?.id} generation=$generation")
                 val attempt=pending?:return
                 if(eventId(eventTime)!=attempt.id||attempt.generation!=generation)return
                 active=attempt;pending=null;sourceName=attempt.detail.sources[attempt.sourceIndex].name
@@ -60,6 +74,7 @@ internal class PlaybackController(context:Context,private val repo:LibvioReposit
     }
     fun open(movie:Movie,preferredSid:Int?=null){
         save();job?.cancel();generation++;pending=null;active=null;player.stop();player.clearMediaItems();sourceName=""
+        attemptedSources.clear()
         val attempt=generation;state=PlayerUiState(movie,buffering=true)
         job=scope.launch{try{
             library.load()
@@ -75,13 +90,14 @@ internal class PlaybackController(context:Context,private val repo:LibvioReposit
         }catch(e:Exception){if(e is CancellationException)throw e;if(attempt==generation)state=state.copy(error=userError(e),buffering=false)}}
     }
     private suspend fun prepare(detail:Detail,sourceIndex:Int,episode:Episode,position:Long,desiredPlay:Boolean,attempt:Long){
+        attemptedSources+=sourceIndex
         val config=repo.player(episode)
         if(config.sid!=detail.sources[sourceIndex].sid||config.nid!=episode.index)throw SiteException("线路信息已变化，请重新打开影片")
         val media=resolver.resolve(config)
         currentCoroutineContext().ensureActive();if(attempt!=generation)return
-        val http=DefaultHttpDataSource.Factory().setUserAgent(media.userAgent).setDefaultRequestProperties(mapOf("Referer" to media.referer)).setConnectTimeoutMs(15_000).setReadTimeoutMs(20_000)
-        val item=MediaItem.Builder().setMediaId(attempt.toString()).setUri(media.url).setMediaMetadata(MediaMetadata.Builder().setTitle(detail.movie.title).build()).build()
-        pending=Attempt(attempt,detail,sourceIndex,episode,media,desiredPlay)
+        val http=DefaultHttpDataSource.Factory().setUserAgent(media.userAgent).setDefaultRequestProperties(media.referer.takeIf{it.isNotBlank()}?.let{mapOf("Referer" to it)}?:emptyMap()).setConnectTimeoutMs(15_000).setReadTimeoutMs(20_000)
+        val item=MediaItem.Builder().setMediaId(attempt.toString()).setUri(media.url).setMimeType(media.mimeType).setMediaMetadata(MediaMetadata.Builder().setTitle(detail.movie.title).build()).build()
+        pending=Attempt(attempt,detail,sourceIndex,episode,media,desiredPlay,position)
         state=state.copy(error=null,renderedFrame=false,buffering=true,trackInfo=videoTrackInfo(-1,-1,-1,-1))
         // The bundled MP4 extractor crashes on HD2's HEVC prefix SEI with no layer info.
         // Android's native MediaParser handles this sample on API 30+ without rewriting media.
@@ -91,7 +107,19 @@ internal class PlaybackController(context:Context,private val repo:LibvioReposit
         player.setMediaSource(source,position.coerceAtLeast(0))
         player.setPlaybackSpeed(state.speed);player.prepare();player.playWhenReady=desiredPlay&&foreground
     }
-    private fun play(detail:Detail,sourceIndex:Int,episode:Episode,position:Long,desiredPlay:Boolean){
+    private fun tryCompatibleSource(reason:String):Boolean {
+        val current=pending?:return false
+        if(current.generation!=generation||player.currentMediaItem?.mediaId!=current.id)return false
+        val next=current.detail.sources.indices.firstNotNullOfOrNull{index->
+            if(index in attemptedSources)null else matchingEpisode(current.episode,current.detail.sources[index].episodes,current.detail.sources[current.sourceIndex].episodes.size)?.let{index to it}
+        }?:return false
+        player.stop()
+        play(current.detail,next.first,next.second,current.resumeAt,current.desiredPlay,automatic=true)
+        state=state.copy(note="$reason，正在切换到 ${current.detail.sources[next.first].name}…")
+        return true
+    }
+    private fun play(detail:Detail,sourceIndex:Int,episode:Episode,position:Long,desiredPlay:Boolean,automatic:Boolean=false){
+        if(!automatic)attemptedSources.clear()
         save();job?.cancel();generation++;pending=null;val attempt=generation
         state=state.copy(note="正在加载 ${detail.sources[sourceIndex].name}…",error=null)
         job=scope.launch{try{prepare(detail,sourceIndex,episode,position,desiredPlay,attempt)}catch(e:Exception){if(e is CancellationException)throw e;if(attempt==generation)state=state.copy(error=userError(e),buffering=false,note="")}}

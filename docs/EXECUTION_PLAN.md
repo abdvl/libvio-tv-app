@@ -56,3 +56,11 @@ docs/verification/   # 按版本记录证据与边界
 - S06：调试 APK、单元测试、lint、模拟器实站测试及截图已建立；正式签名/更新器/Release、API 26–29 播放兼容、Google TV 真机和长播尚未完成。
 
 本轮是可安装开发原型，不标为所有发布验收通过。下一步按 [原型验证记录](verification/prototype/README.md) 中的未覆盖项继续。
+
+## 0.1.1-dev 播放修复
+
+- 对照 Chrome 验证两部反馈影片均能播放；接入 BD1 / 4kvm、HD3 / lbyy 及同入口 bhyy。
+- 支持 HLS blob 背后的实际清单，包括没有 m3u8 后缀的同站 secure.php；保持解析生命周期与媒体 URL 不落盘。
+- 按设备解码能力检测不兼容格式，首帧前按同集语义换到未尝试的线路；成功出画后再提交线路和续播记录。
+- 已通过 TV 模拟器两个页面入口、首帧、跳转与收藏续播；Chromecast 的前台验收仍因设备休眠待继续。
+- 详细结果及 APK 校验值见 [播放修复验证](verification/playback-fix/README.md)。
