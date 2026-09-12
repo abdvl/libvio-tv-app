@@ -1,0 +1,86 @@
+{
+  "version": "0.1.0-dev",
+  "date": "2026-09-12",
+  "device": "Android TV arm64 emulator-5556",
+  "outputPixels": [
+    1920,
+    1080
+  ],
+  "physicalDeviceTested": false,
+  "build": "assembleDebug assembleDebugAndroidTest testDebugUnitTest lintDebug",
+  "kotlinTests": 11,
+  "kotlinFailures": 0,
+  "pythonTests": 11,
+  "androidTests": 4,
+  "androidResult": "OK (4 tests)",
+  "nativeProvidersVerified": [
+    "BBA / HD7",
+    "rrmj / HD2"
+  ],
+  "apk": {
+    "name": "libvio-tv-0.1.0-dev-debug.apk",
+    "bytes": 21261017,
+    "sha256": "55af66f2eef96cc10a4277ae15183c5193fe756fa14317e70182b951654ee9ad",
+    "signing": "debug only",
+    "publishedRelease": false
+  },
+  "screenshots": [
+    {
+      "file": "screenshots/catalog.png",
+      "sha256": "ba648ff1a9a0c455324518eba833654195fbc514c1da52962083b68449506a05"
+    },
+    {
+      "file": "screenshots/category.png",
+      "sha256": "7d30437de59f8b998a5f986633d03c68cb51ea3df748e032bf8c5de9c06daecc"
+    },
+    {
+      "file": "screenshots/favorites.png",
+      "sha256": "d94fb57070e2129309fa46f09d8dd26e22dd85f166c088b9295fd3481662b2c4"
+    },
+    {
+      "file": "screenshots/filter-year.png",
+      "sha256": "76d5f815faf6ef1d6a55f1d32807c5fe76362ca9e301179ba50703bac531ce75"
+    },
+    {
+      "file": "screenshots/history.png",
+      "sha256": "18b219758ec4f9792807f06459d5ebbb7153800877c2522902ef6ec3de16345a"
+    },
+    {
+      "file": "screenshots/home.png",
+      "sha256": "1c424df57a9e28ca62bc62741124cfd68998f8a3c2b81caa9ce87dbf889d8df7"
+    },
+    {
+      "file": "screenshots/player-description.png",
+      "sha256": "519c481394fa70aa47489b4fad896aaade3a1b231adaf72a1a78df7c2eed080d"
+    },
+    {
+      "file": "screenshots/player-fullscreen.png",
+      "sha256": "27e4bd220a60170b0d4784e07965d03a0d56c672d4a5baf784edc8d1b2ece280"
+    },
+    {
+      "file": "screenshots/player-normal.png",
+      "sha256": "cb99a2f68137e11c4f8117e7157b7445691b9cf2bed211b807840c86e0ef8d32"
+    },
+    {
+      "file": "screenshots/player-sources.png",
+      "sha256": "7e2236b7e12b054e865631a06ed668e202a98eb347242555355958dfb1c7eae9"
+    },
+    {
+      "file": "screenshots/player-speed.png",
+      "sha256": "5fd61ddda250eef3b12de0e89442f51d6512d3949b85b54019419e0ef632a83b"
+    },
+    {
+      "file": "screenshots/recent-focused.png",
+      "sha256": "5ac032059d083d749d7ce71143d8597300f1b98d41e18a6e62f07576b11659e7"
+    },
+    {
+      "file": "screenshots/search.png",
+      "sha256": "603bd26bd74dfe8bea72e225d365cdf21c44aaf00d1f51ac4483860eb0c310aa"
+    },
+    {
+      "file": "screenshots/settings.png",
+      "sha256": "58cdda3f90ff2ab36702f215ed38c51dbcdd1756a97f20f3a5ed65c6788b1cfa"
+    }
+  ],
+  "androidApi": 34
+}

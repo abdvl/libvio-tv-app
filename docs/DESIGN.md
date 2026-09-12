@@ -1,6 +1,6 @@
 # LIBVIO TV 实现设计
 
-状态：调研后的实施基线，尚未实现 Android App。目标设备：Google TV / Android TV，横屏、遥控器优先，无账号依赖。
+状态：目标设计基线；Android 开发原型已实现，具体完成情况以 EXECUTION_PLAN 和原型验证记录为准。目标设备：Google TV / Android TV，横屏、遥控器优先，无账号依赖。
 
 ## 1. Olevod 复用原则
 

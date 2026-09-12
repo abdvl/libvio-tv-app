@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.Libvio" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowBackground">#101718</item>
+        <item name="android:colorAccent">#9BD7FF</item>
+    </style>
+</resources>
