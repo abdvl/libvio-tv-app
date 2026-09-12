@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-12",
+  "status": "research-complete-android-not-implemented",
+  "methods": [
+    "Browser/Computer Use through cua_repl",
+    "Chrome scoped network observation",
+    "independent Python public HTML probe",
+    "offline unittest"
+  ],
+  "olevod_reference_local_commit": "0fec7424e1d761373e00c52c0c816e09a42cf4fe",
+  "entry": {
+    "url": "https://libvio.lol/",
+    "listed_hosts": [
+      "https://www.libvio.cam",
+      "https://www.libvio.lat",
+      "https://www.libvio.bid",
+      "https://www.libvio.dev"
+    ],
+    "checked_hosts": [
+      "https://www.libvio.lat",
+      "https://www.libvio.cam"
+    ],
+    "listed_but_not_health_checked": [
+      "https://www.libvio.bid",
+      "https://www.libvio.dev"
+    ]
+  },
+  "http_probes": [
+    {
+      "time_utc": "2026-09-12T18:05:51.108711+00:00",
+      "host": "https://www.libvio.lat",
+      "unique_home_cards": 60,
+      "detail_path": "/detail/5813548.html",
+      "title": "直到T恤干透",
+      "sources": [
+        {
+          "label": "HD7播放",
+          "kind": "online_candidate",
+          "sid": 4,
+          "episode_count": 10
+        },
+        {
+          "label": "HD2播放",
+          "kind": "online_candidate",
+          "sid": 6,
+          "episode_count": 10
+        },
+        {
+          "label": "HD10播放",
+          "kind": "online_candidate",
+          "sid": 5,
+          "episode_count": 10
+        },
+        {
+          "label": "视频下载 (UC网盘)",
+          "kind": "external_download",
+          "sid": 3,
+          "episode_count": 1
+        },
+        {
+          "label": "视频下载 (夸克)",
+          "kind": "external_download",
+          "sid": 1,
+          "episode_count": 1
+        },
+        {
+          "label": "视频下载 (百度)",
+          "kind": "external_download",
+          "sid": 2,
+          "episode_count": 1
+        }
+      ],
+      "player_configs": [
+        {
+          "name": "HD7播放",
+          "path": "/play/5813548-4-1.html",
+          "host": "https://www.libvio.lat",
+          "internal_id": "3548",
+          "sid": 4,
+          "nid": 1,
+          "provider": "BBA",
+          "encrypt": 3,
+          "has_url": true,
+          "url_is_https": false
+        },
+        {
+          "name": "HD2播放",
+          "path": "/play/5813548-6-1.html",
+          "host": "https://www.libvio.lat",
+          "internal_id": "3548",
+          "sid": 6,
+          "nid": 1,
+          "provider": "rrmj",
+          "encrypt": 3,
+          "has_url": true,
+          "url_is_https": false
+        },
+        {
+          "name": "HD10播放",
+          "path": "/play/5813548-5-1.html",
+          "host": "https://www.libvio.lat",
+          "internal_id": "3548",
+          "sid": 5,
+          "nid": 1,
+          "provider": "NBY",
+          "encrypt": 3,
+          "has_url": true,
+          "url_is_https": false
+        }
+      ],
+      "search": null
+    },
+    {
+      "time_utc": "2026-09-12T18:11:27.794092+00:00",
+      "host": "https://www.libvio.cam",
+      "unique_home_cards": 60,
+      "detail_path": "/detail/5813548.html",
+      "title": "直到T恤干透",
+      "sources": [
+        {
+          "label": "HD7播放",
+          "kind": "online_candidate",
+          "sid": 4,
+          "episode_count": 10
+        },
+        {
+          "label": "HD2播放",
+          "kind": "online_candidate",
+          "sid": 6,
+          "episode_count": 10
+        },
+        {
+          "label": "HD10播放",
+          "kind": "online_candidate",
+          "sid": 5,
+          "episode_count": 10
+        },
+        {
+          "label": "视频下载 (UC网盘)",
+          "kind": "external_download",
+          "sid": 3,
+          "episode_count": 1
+        },
+        {
+          "label": "视频下载 (夸克)",
+          "kind": "external_download",
+          "sid": 1,
+          "episode_count": 1
+        },
+        {
+          "label": "视频下载 (百度)",
+          "kind": "external_download",
+          "sid": 2,
+          "episode_count": 1
+        }
+      ],
+      "player_configs": [
+        {
+          "name": "HD7播放",
+          "path": "/play/5813548-4-1.html",
+          "host": "https://www.libvio.cam",
+          "internal_id": "3548",
+          "sid": 4,
+          "nid": 1,
+          "provider": "BBA",
+          "encrypt": 3,
+          "has_url": true,
+          "url_is_https": false
+        }
+      ],
+      "search": {
+        "query": "流浪地球",
+        "host": "https://www.libvio.cam",
+        "cards": [
+          {
+            "route_id": "5811477",
+            "title": "流浪地球",
+            "detail_path": "/detail/5811477.html"
+          }
+        ],
+        "next_path": null
+      }
+    }
+  ],
+  "browser_playback": [
+    {
+      "path": "https://www.libvio.lat/play/5813548-4-1.html",
+      "label": "HD7播放",
+      "provider": "BBA",
+      "observed_position_seconds": [
+        8,
+        41,
+        68
+      ],
+      "observed_duration_seconds": 2633,
+      "visible_video_frame": true,
+      "http_media_status": 206,
+      "media_container": "MP4",
+      "native_android_verified": false
+    },
+    {
+      "path": "https://www.libvio.lat/play/5813548-6-1.html",
+      "label": "HD2播放",
+      "provider": "rrmj",
+      "observed_position_seconds": [
+        23
+      ],
+      "observed_duration_seconds": 2633,
+      "browser_player_state": "Pause control and advancing elapsed time",
+      "http_media_status": 206,
+      "media_mime": "video/mp4",
+      "native_android_verified": false
+    }
+  ],
+  "browser_search": {
+    "host": "https://www.libvio.lat",
+    "method": "POST",
+    "action": "/search/-------------.html",
+    "field": "wd",
+    "query": "流浪地球",
+    "result_path": "/detail/5811477.html"
+  },
+  "movie_detail_sample": {
+    "path": "https://www.libvio.lat/detail/5811477.html",
+    "online_candidate_labels": [
+      "BD1播放",
+      "BD2播放",
+      "HD7播放"
+    ],
+    "external_download_labels": [
+      "视频下载 (夸克)"
+    ],
+    "playback_tested": false
+  },
+  "offline_tests": {
+    "command": "python3 -m unittest discover -s tests -v",
+    "passed": 11,
+    "failed": 0,
+    "scope": "Python research parser only"
+  },
+  "not_verified": [
+    "Android build and UI",
+    "Google TV / Chromecast physical device",
+    "Native playback resolution and required request headers",
+    "HD10 actual media",
+    "Movie sample actual playback",
+    "All source provider variants",
+    "HLS, HDR, 4K, audio and subtitles",
+    "Search pagination, rate limits, combined filters",
+    "Actual host failover during playback"
+  ],
+  "data_policy": "No cookies, credentials, signed media URLs, full movie plots, or downloaded videos in this record."
+}
