@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=com.libvio.tv.ReportedPlaybackTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.libvio.tv.ReportedPlaybackTest:
+INSTRUMENTATION_STATUS: test=moanaHomeDefaultBd1RendersHlsAndSeeks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.libvio.tv.ReportedPlaybackTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=moanaHomeDefaultBd1RendersHlsAndSeeks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 32.222
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
+
+09-12 17:58:08.715 LibvioRegression: moanaPixelCopyStatus=0 (SUCCESS)

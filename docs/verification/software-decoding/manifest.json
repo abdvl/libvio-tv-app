@@ -1,0 +1,73 @@
+{
+  "date": "2026-09-12",
+  "version": "0.1.2-dev",
+  "versionCode": 3,
+  "applicationId": "com.libvio.tv",
+  "sourceBase": "a08a38868f964ab91cae60974767f6d7c3ad90a3",
+  "libvlc": "3.6.5",
+  "apk": {
+    "path": "artifacts/prototype/libvio-tv-0.1.2-dev-armeabi-v7a-debug.apk",
+    "bytes": 61719459,
+    "sha256": "721ee0f0e5fd255af91c452a9a24fc32592bd920706cbc89ac4b0957da0b16c8",
+    "installedSha256": "721ee0f0e5fd255af91c452a9a24fc32592bd920706cbc89ac4b0957da0b16c8"
+  },
+  "physicalDevice": {
+    "model": "Chromecast",
+    "device": "sabrina",
+    "android": 14,
+    "api": 34,
+    "abi": "armeabi-v7a",
+    "tests": 4,
+    "passed": 4,
+    "seconds": 329.224,
+    "finalThroughputGate": {
+      "mediaDurationMsAtLeast": 60000,
+      "displayedGreaterThan": 1000,
+      "lostRatioBelow": 0.15,
+      "passed": true,
+      "exactCountsRetained": false
+    },
+    "additionalMoanaOutputTest": {
+      "passed": true,
+      "seconds": 32.222,
+      "seekMs": 90000,
+      "additionalRenderedBuffersAtLeast": 49,
+      "pixelCopyStatus": 0,
+      "surfaceImage": "screenshots/moana-video-surface.png",
+      "systemScreenshotHasBlackVideoRegion": true
+    }
+  },
+  "emulator": {
+    "api": 34,
+    "abi": "arm64-v8a",
+    "tests": 6,
+    "initialPassed": 5,
+    "initialTimeouts": 1,
+    "scopedRerunPassed": 1,
+    "scopedRerunSeconds": 121.378,
+    "throughput": {
+      "mediaDurationMs": 60250,
+      "displayed": 1439,
+      "lost": 0
+    }
+  },
+  "unitTests": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0
+  },
+  "buildAndLint": "passed",
+  "files": {
+    "screenshots/game-of-thrones-compatible-native.png": "a5b04d53727447b706b6175aa4922dec618c8ff135d445bcb9818b0914ace377",
+    "screenshots/got-hd3-fullscreen.png": "445116098055914d8c253dc9dcecc26e7fa5fa9dca1039c5eeca9ed7b534522f",
+    "screenshots/got-hd3-normal.png": "e62282063b77d93f3de9576a64b529d1efe07c1af46ec0b251609c3de59b3003",
+    "screenshots/got-hd3-software.png": "259ac060f7d8d9e2c839223bfcd8fb360aa3a7a03bcd75751dd8b825eec72125",
+    "screenshots/moana-bd1-native.png": "e6aac6a90a92d53fec47665694e0fb3cf7d8eb4a850931f985d1177a7d5d2ef0",
+    "screenshots/moana-video-surface.png": "21f970fc272c76c650c5de1af47cdeebcb49b25e8a4957a5ae9582c807330107",
+    "results/chromecast-final.txt": "af3e0c48c8870624faa53041526614b025881f05df65c2ad6384165b73bc212c",
+    "results/chromecast-moana-surface.txt": "a2319758abfa7e4c493e861b195a1a2c2d35129d9b831a4d1f6bede2fdc21f65",
+    "results/emulator-metrics.txt": "83871d741cc108cea91a0c33aa9c8ad438039613c3d7fee2ee3a68b9892aa6f2",
+    "results/emulator-rerun.txt": "48f5c4bb52049a36fa0b676da26c61b43e5d85175fce01439aa2250c7821fb29",
+    "results/emulator-suite.txt": "d20b30587b0df6ec52bcb434ab34f2553c13031ca06189b6972b27227a197459"
+  }
+}

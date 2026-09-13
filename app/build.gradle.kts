@@ -10,9 +10,17 @@ android {
         applicationId = "com.libvio.tv"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.1.1-dev"
+        versionCode = 3
+        versionName = "0.1.2-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            isUniversalApk = false
+        }
     }
     buildFeatures { compose = true; buildConfig = true }
     compileOptions {
@@ -38,6 +46,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.videolan.android:libvlc-all:3.6.5")
     implementation("androidx.media3:media3-exoplayer:1.7.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.7.1")
     implementation("androidx.media3:media3-session:1.7.1")

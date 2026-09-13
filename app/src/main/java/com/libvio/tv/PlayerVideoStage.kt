@@ -19,16 +19,19 @@ internal fun PlayerVideoStage(
     video:@Composable ()->Unit,
     controlContent:@Composable ()->Unit
 ) {
-    if(full)Box(modifier.fillMaxHeight()){
-        Box(Modifier.fillMaxSize().then(videoModifier),contentAlignment=Alignment.Center){video()}
-        if(controlsVisible)Column(
-            Modifier.align(Alignment.BottomCenter).fillMaxWidth()
-                .background(Brush.verticalGradient(listOf(Color.Transparent,Color(0xFF0A1112).copy(alpha=.88f))))
-                .padding(start=36.dp,top=28.dp,end=36.dp,bottom=24.dp),
-            verticalArrangement=Arrangement.spacedBy(8.dp)
-        ){controlContent()}
-    }else Column(modifier.fillMaxHeight(),verticalArrangement=Arrangement.spacedBy(8.dp)){
-        Box(Modifier.fillMaxWidth().weight(1f).then(videoModifier),contentAlignment=Alignment.Center){video()}
-        Column(Modifier.fillMaxWidth(),verticalArrangement=Arrangement.spacedBy(8.dp)){controlContent()}
+    // Keep the video at one composition location. Recreating its Surface can make
+    // libVLC report a premature end of stream while switching fullscreen on a TV.
+    Column(modifier.fillMaxHeight(), verticalArrangement=Arrangement.spacedBy(if(full)0.dp else 8.dp)) {
+        Box(Modifier.fillMaxWidth().weight(1f)) {
+            Box(Modifier.fillMaxSize().then(videoModifier),contentAlignment=Alignment.Center){video()}
+            if(full&&controlsVisible)Column(
+                Modifier.align(Alignment.BottomCenter).fillMaxWidth()
+                    .background(Brush.verticalGradient(listOf(Color.Transparent,Color(0xFF0A1112).copy(alpha=.88f))))
+                    .padding(start=36.dp,top=28.dp,end=36.dp,bottom=24.dp),
+                verticalArrangement=Arrangement.spacedBy(8.dp)
+            ){controlContent()}
+        }
+        if(!full)Column(Modifier.fillMaxWidth(),verticalArrangement=Arrangement.spacedBy(8.dp)){controlContent()}
     }
+
 }

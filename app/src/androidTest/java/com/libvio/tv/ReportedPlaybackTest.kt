@@ -60,16 +60,52 @@ class ReportedPlaybackTest {
         ui.onNodeWithTag("home-feed").performScrollToNode(hasText("海洋奇缘：启航"))
         ui.onNodeWithText("海洋奇缘：启航").performClick()
         nativePlayback("BD1播放")
+        var renderedBeforeSeek = 0
         ui.runOnUiThread {
             val p = ui.activity.model.player
             assertEquals(5813774L, p.state.movie.id)
             assertTrue(p.state.duration > 6_000_000)
             assertEquals("application/x-mpegURL", p.player.currentMediaItem?.localConfiguration?.mimeType)
             assertTrue(p.state.seekable)
-            p.player.seekTo(45_000)
+            val counters = (p.player as androidx.media3.exoplayer.ExoPlayer).videoDecoderCounters!!
+            counters.ensureUpdated()
+            renderedBeforeSeek = counters.renderedOutputBufferCount
+            p.player.seekTo(90_000)
         }
-        waitFor("HLS seek and continued playback") { ui.activity.model.player.state.position > 47_000 && ui.activity.model.player.state.playing }
+        waitFor("HLS seek and continued video output") {
+            val p = ui.activity.model.player
+            val counters = (p.player as androidx.media3.exoplayer.ExoPlayer).videoDecoderCounters!!
+            counters.ensureUpdated()
+            p.state.position in 92_000..105_000 && p.state.playing &&
+                counters.renderedOutputBufferCount > renderedBeforeSeek + 48
+        }
         capture("moana-bd1-native")
+        // Hardware overlays can be absent from system screenshots; inspect the video Surface directly.
+        val pixelCopyDone = java.util.concurrent.CountDownLatch(1)
+        var pixelCopyStatus = -1
+        var videoImage: Bitmap? = null
+        ui.runOnUiThread {
+            fun playerView(view: android.view.View): androidx.media3.ui.PlayerView? {
+                if (view is androidx.media3.ui.PlayerView) return view
+                if (view is android.view.ViewGroup) for (index in 0 until view.childCount) {
+                    playerView(view.getChildAt(index))?.let { return it }
+                }
+                return null
+            }
+            val surface = playerView(ui.activity.window.decorView)!!.videoSurfaceView as android.view.SurfaceView
+            videoImage = Bitmap.createBitmap(surface.width, surface.height, Bitmap.Config.ARGB_8888)
+            android.view.PixelCopy.request(surface, videoImage!!, { result ->
+                pixelCopyStatus = result
+                pixelCopyDone.countDown()
+            }, android.os.Handler(android.os.Looper.getMainLooper()))
+        }
+        assertTrue("Video Surface capture must finish", pixelCopyDone.await(10, java.util.concurrent.TimeUnit.SECONDS))
+        android.util.Log.i("LibvioRegression", "moanaPixelCopyStatus=$pixelCopyStatus")
+        if (pixelCopyStatus == android.view.PixelCopy.SUCCESS) {
+            val dir = File(ui.activity.getExternalFilesDir(null), "verification/playback-fix")
+            File(dir, "moana-video-surface.png").outputStream().use { videoImage!!.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        }
+        videoImage?.recycle()
     }
     @Test fun gameOfThronesExistingFavoriteSelectsCompatibleSourceAndReopens() {
         enabled()

@@ -14,7 +14,7 @@ internal fun NativePlayer(controller:PlaybackController,full:Boolean,toggleFull:
     PlayerContent(state,full,PlayerActions(back=onBack,toggleFull=toggleFull,togglePlay=controller::toggle,
         seek=controller::seek,setSpeed=controller::speed,favorite=onFavorite,chooseGroup=controller::chooseGroup,
         playEpisode=controller::chooseEpisode,retry=controller::retry,episodeFocus={},sources={controller.sourceMenu=true}),menuOpen=controller.sourceMenu){
-        AndroidView(factory={PlayerView(it).apply{player=controller.player;useController=false;isFocusable=false}},modifier=Modifier.fillMaxSize(),update={it.player=controller.player;it.keepScreenOn=state.playing})
+        AndroidView(factory={PlayerView(it).apply{player=controller.player;useController=false;isFocusable=false}},modifier=Modifier.fillMaxSize(),onRelease={it.player=null},update={it.player=controller.player;it.keepScreenOn=state.playing})
     }
     if(controller.sourceMenu){
         val d=controller.state.detail

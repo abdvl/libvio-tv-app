@@ -1,0 +1,3 @@
+2026-09-12 17:51:14.187 PDT
+Final source and APK, scoped rerun, API 34 arm64 TV emulator.
+LibvioSoftwareTest: model=sdk_google_atv64_arm64 displayed=1439 lost=0 decoded=2878 elapsedMediaMs=60250
