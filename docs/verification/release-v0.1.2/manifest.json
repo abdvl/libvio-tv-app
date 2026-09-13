@@ -51,8 +51,40 @@
     "note": "Existing debug installation retained; no user data erased to change signing identity."
   },
   "publication": {
-    "status": "pending public verification",
-    "expectedTag": "v0.1.2",
-    "expectedUrl": "https://github.com/abdvl/libvio-tv-app/releases/tag/v0.1.2"
+    "status": "verified",
+    "tag": "v0.1.2",
+    "releaseUrl": "https://github.com/abdvl/libvio-tv-app/releases/tag/v0.1.2",
+    "releaseId": 387779253,
+    "draft": false,
+    "prerelease": false,
+    "publishedAt": "2026-09-13T03:23:21Z",
+    "verifiedAt": "2026-09-13T03:24:43.952807+00:00",
+    "sourceCommit": "394b11d30e6ada6e0e500525ff170823414f63ab",
+    "assets": [
+      {
+        "name": "libvio-tv-v0.1.2-arm64-v8a.apk",
+        "bytes": 67083088,
+        "sha256": "4863b80b560451991860ebc3324246f45adada6994f5bf6762c15012f57c46a8",
+        "downloadUrl": "https://github.com/abdvl/libvio-tv-app/releases/download/v0.1.2/libvio-tv-v0.1.2-arm64-v8a.apk",
+        "githubDigest": "sha256:4863b80b560451991860ebc3324246f45adada6994f5bf6762c15012f57c46a8",
+        "publicDownloadVerified": true
+      },
+      {
+        "name": "libvio-tv-v0.1.2-armeabi-v7a.apk",
+        "bytes": 54391128,
+        "sha256": "d3d023bfe379d190d0697b5f050e3adaf883c3ee7cac11eb127b8898632d8a5d",
+        "downloadUrl": "https://github.com/abdvl/libvio-tv-app/releases/download/v0.1.2/libvio-tv-v0.1.2-armeabi-v7a.apk",
+        "githubDigest": "sha256:d3d023bfe379d190d0697b5f050e3adaf883c3ee7cac11eb127b8898632d8a5d",
+        "publicDownloadVerified": true
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "bytes": 196,
+        "sha256": "d0ac291c05a8792c49dc90f50a4ca1858489e3a0847850b1edc11482d1fdbb97",
+        "downloadUrl": "https://github.com/abdvl/libvio-tv-app/releases/download/v0.1.2/SHA256SUMS.txt",
+        "githubDigest": "sha256:d0ac291c05a8792c49dc90f50a4ca1858489e3a0847850b1edc11482d1fdbb97",
+        "publicDownloadVerified": true
+      }
+    ]
   }
 }

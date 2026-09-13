@@ -83,6 +83,6 @@ docs/verification/   # 按版本记录证据与边界
 - [x] 独立 LIBVIO 发布签名，ARM32 / ARM64 APK 与 SHA256SUMS。
 - [x] Release 构建、21 项单元测试、lint、4 项正式包 TV 模拟器播放回归。
 - [x] README 下载入口与首次 Token history 基线，逐请求与截止点核验。
-- [ ] 远程分支、v0.1.2 Tag、正式 Release 和公开下载校验。
+- [x] 远程分支与 v0.1.2 Tag、正式 Release、两个公开 APK 和校验文件均独立验证通过。
 
 见 [发布验证](verification/release-v0.1.2/README.md)。

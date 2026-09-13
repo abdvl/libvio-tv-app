@@ -22,4 +22,11 @@ API 34 / arm64 TV 模拟器安装了 Release APK 和同签名测试包，4 项�
 
 ## 发布状态
 
-源码、Tag、Release 附件及公共下载在正式发布后独立核验，结果更新至本节与 manifest.json。
+[v0.1.2 已正式发布](https://github.com/abdvl/libvio-tv-app/releases/tag/v0.1.2)，发布时间 2026-09-12 20:23:21 PDT。GitHub API 确认不是草稿或预发布。
+
+- 发布时远程 main 与 v0.1.2 均指向 `394b11d30e6ada6e0e500525ff170823414f63ab`；后续 main 的核验文档提交不会移动已发布标签。
+- Release 附件集合恰为上述两个 ARM APK 和 SHA256SUMS.txt；版本、字节数和 GitHub digest 均与本地产物一致。
+- 2026-09-12 20:24:43 PDT 从三个公共下载 URL 独立重新下载，两个 APK 的 SHA-256 均匹配已发布的 SHA256SUMS.txt，同时匹配本地产物；校验文件字节内容也完全一致。
+- 网页显示为 Latest，发布 API、Git refs 和公共下载证据分别核对。完整结果保存在 manifest.json。
+
+本次发布与核算操作位于 Token history 固定截止点之后，将留待下一次增量统计。
