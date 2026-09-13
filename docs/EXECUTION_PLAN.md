@@ -77,3 +77,12 @@ docs/verification/   # 按版本记录证据与边界
 - [x] 修复布局切换造成的提前结束与误跳集，最终真机全屏/普通布局、收藏续播及首页 HLS 等 4 项回归通过；已核对电视安装包 SHA-256。
 
 详细证据见 [软件解码验证](verification/software-decoding/README.md)。
+
+## 2026-09-12：v0.1.2 正式发布
+
+- [x] 独立 LIBVIO 发布签名，ARM32 / ARM64 APK 与 SHA256SUMS。
+- [x] Release 构建、21 项单元测试、lint、4 项正式包 TV 模拟器播放回归。
+- [x] README 下载入口与首次 Token history 基线，逐请求与截止点核验。
+- [ ] 远程分支、v0.1.2 Tag、正式 Release 和公开下载校验。
+
+见 [发布验证](verification/release-v0.1.2/README.md)。

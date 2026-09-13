@@ -1,0 +1,58 @@
+{
+  "versionName": "0.1.2",
+  "versionCode": 4,
+  "packageName": "com.libvio.tv",
+  "implementationCommit": "72371791747cbc453f8ac29fbbaf1d250cc019a3",
+  "minSdk": 26,
+  "targetSdk": 35,
+  "signerCertificateSha256": "8a87027c873b1ee066828580088260ffe3f71ff374d192c192afdaab324e02fa",
+  "assets": [
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 196,
+      "sha256": "d0ac291c05a8792c49dc90f50a4ca1858489e3a0847850b1edc11482d1fdbb97"
+    },
+    {
+      "name": "libvio-tv-v0.1.2-arm64-v8a.apk",
+      "bytes": 67083088,
+      "sha256": "4863b80b560451991860ebc3324246f45adada6994f5bf6762c15012f57c46a8"
+    },
+    {
+      "name": "libvio-tv-v0.1.2-armeabi-v7a.apk",
+      "bytes": 54391128,
+      "sha256": "d3d023bfe379d190d0697b5f050e3adaf883c3ee7cac11eb127b8898632d8a5d"
+    }
+  ],
+  "build": {
+    "assembleRelease": "passed",
+    "testReleaseUnitTest": {
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lintRelease": "passed",
+    "signatures": "Both ARM APKs and instrumentation APK match the independent LIBVIO release certificate; v2 verified."
+  },
+  "emulator": {
+    "api": 34,
+    "abi": "arm64-v8a",
+    "buildType": "release",
+    "tests": 4,
+    "failures": 0,
+    "seconds": 187.322,
+    "testPackageSignedWithSameCertificate": true
+  },
+  "physicalDevice": {
+    "buildTested": "0.1.2-dev",
+    "implementationCommit": "72371791747cbc453f8ac29fbbaf1d250cc019a3",
+    "evidence": "../software-decoding/README.md",
+    "formalReleaseInstalled": false,
+    "note": "Existing debug installation retained; no user data erased to change signing identity."
+  },
+  "publication": {
+    "status": "pending public verification",
+    "expectedTag": "v0.1.2",
+    "expectedUrl": "https://github.com/abdvl/libvio-tv-app/releases/tag/v0.1.2"
+  }
+}

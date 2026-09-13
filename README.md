@@ -2,7 +2,20 @@
 
 面向 Google TV / Android TV 的原生客户端。交互和布局沿用 [Olevod TV](https://github.com/abdvl/olevod-tv-app)，焦点、按钮与进度条使用淡蓝色 `#9BD7FF`。
 
-**当前版本：0.1.2-dev 开发原型，加入同线路软件视频解码，尚未正式发布。**
+**当前版本：[v0.1.2](https://github.com/abdvl/libvio-tv-app/releases/tag/v0.1.2)，加入同线路软件视频解码。**
+
+## 下载与安装
+
+[最新 Release](https://github.com/abdvl/libvio-tv-app/releases/latest) · [v0.1.2 更新说明](docs/releases/v0.1.2.md)
+
+| 设备架构 | 安装包 |
+| --- | --- |
+| 32 位 ARM，包括本次测试的 Chromecast | [ARM32 APK](https://github.com/abdvl/libvio-tv-app/releases/download/v0.1.2/libvio-tv-v0.1.2-armeabi-v7a.apk) |
+| 64 位 ARM Android / Google TV | [ARM64 APK](https://github.com/abdvl/libvio-tv-app/releases/download/v0.1.2/libvio-tv-v0.1.2-arm64-v8a.apk) |
+
+[SHA256SUMS.txt](https://github.com/abdvl/libvio-tv-app/releases/download/v0.1.2/SHA256SUMS.txt)。下载与设备架构匹配的 APK 后，通过电视文件管理器安装，或使用 `adb install -r <APK路径>`。最低 Android 8.0 / API 26。
+
+此前 `0.1.x-dev` 调试包与正式版签名不同，不能直接覆盖；需要保留收藏和历史时，请保留旧安装，先安排数据迁移，避免卸载丢失记录。后续同一正式签名的版本可以覆盖升级。
 
 ## 已实现
 
@@ -36,7 +49,7 @@
 
 调试包按处理器架构拆分：`app/build/outputs/apk/debug/app-armeabi-v7a-debug.apk` 适用于本次测试的 Chromecast；64 位 ARM 设备使用 `app-arm64-v8a-debug.apk`，另有 x86 / x86_64 包。通过 `adb shell getprop ro.product.cpu.abilist` 确认目标架构。包名 `com.libvio.tv`，可与 Olevod TV 同时安装。首次配置本机缓存后，可使用 `source scripts/android-env.sh`；`.tools/` 不提交。
 
-Android 测试工程可通过 `./gradlew assembleDebugAndroidTest` 构建。访问真实站点的测试必须显式传入 `-e liveLibvio true`，详见验证记录。正式发布签名、更新检查和 GitHub Release 尚未配置。
+Android 测试工程可通过 `./gradlew assembleDebugAndroidTest` 构建。访问真实站点的测试必须显式传入 `-e liveLibvio true`，详见验证记录。正式签名和发布步骤见 [发布说明](docs/RELEASING.md)；应用内更新检查尚未实现。
 
 ## 调研与设计
 
@@ -52,6 +65,20 @@ Android 测试工程可通过 `./gradlew assembleDebugAndroidTest` 构建。访�
 python3 -m unittest discover -s tests -v
 python3 scripts/probe_site.py --live --detail-path /detail/5813548.html --limit 3 --output .tools/research/latest.json
 ```
+
+## Token history
+
+记录每次发布所使用的模型、输入与缓存、输出，以及按当时公开 API 价格折算的美元价值。**这是开发用量的 Standard API 等价估算，不是 Codex 订阅账单或实际付款金额。**
+
+| Release | 模型 | 输入 token（含缓存） | 其中缓存输入 | 输出 token（含推理） | 总 token | Standard API 估值（USD） |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| v0.1.2 首次发布基线 | GPT-6 Astra | 54,889,368 | 53,181,568 | 260,597 | **55,149,965** | **$83.29** |
+
+覆盖本任务的网站调研、原型实现、设备安装、HLS 修复、同线路软解和真机回归；截至 **2026-09-12 18:07:21.224 PDT** 之前。本次正式发布、核算与后续推送留待下一统计区间，不重复统计 Olevod 原有开发。[阶段明细、逐请求核验及价格依据](docs/accounting/v0.1.2-2026-09-12.md)。
+
+缓存输入已包含在输入中，推理已包含在输出中，不能重复相加。系统审批可核对 21,497,516 token，另有缺少逐请求明细的期初检查点差额 3,249,889 token，均单列、费用未统计。图片生成、其他工具额外费用和税费也未统计，未统计不代表零。
+
+后续发布在表中追加相对上次固定截止点的新增用量，并保留当时价格与统计范围；不覆盖旧行，也不把累计快照逐条相加。
 
 ## 许可
 

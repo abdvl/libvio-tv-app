@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,8 +12,8 @@ android {
         applicationId = "com.libvio.tv"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.1.2-dev"
+        versionCode = 4
+        versionName = "0.1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     splits {
@@ -29,7 +31,25 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
-    buildTypes { release { isMinifyEnabled = false } }
+    testBuildType = providers.gradleProperty("testBuildType").orNull ?: "debug"
+    val releasePropertiesFile = rootProject.file(".secrets/release-signing.properties")
+    val releaseProperties = Properties().apply {
+        if (releasePropertiesFile.exists()) releasePropertiesFile.inputStream().use { load(it) }
+    }
+    signingConfigs {
+        if (releasePropertiesFile.exists()) create("personalRelease") {
+            storeFile = rootProject.file(releaseProperties.getProperty("storeFile"))
+            storePassword = releaseProperties.getProperty("storePassword")
+            keyAlias = releaseProperties.getProperty("keyAlias")
+            keyPassword = releaseProperties.getProperty("keyPassword")
+        }
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            if (releasePropertiesFile.exists()) signingConfig = signingConfigs.getByName("personalRelease")
+        }
+    }
 }
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
